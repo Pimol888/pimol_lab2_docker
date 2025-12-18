@@ -1,0 +1,22 @@
+services:
+  app:
+    build: .
+    container_name: todo_app
+    ports:
+      - "3000:3000"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ""
+      MYSQL_DB: todo_app
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8
+    container_name: todo_mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: todo_app
+    ports:
+      - "3306:3306"
