@@ -1,11 +1,21 @@
 const mysql = require('mysql2');
 
 const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'todo_app'
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DB
 });
+
+function init() {
+  pool.query(`
+    CREATE TABLE IF NOT EXISTS todo_items (
+      id VARCHAR(36) PRIMARY KEY,
+      name VARCHAR(255),
+      completed BOOLEAN
+    )
+  `);
+}
 
 function getItems() {
   return new Promise((resolve, reject) => {
@@ -28,6 +38,8 @@ function storeItem(item) {
     );
   });
 }
+
+init();
 
 module.exports = {
   getItems,
